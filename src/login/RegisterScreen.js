@@ -5,7 +5,8 @@ import { BlurView } from 'expo-blur';
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import { initializeApp, initializeAuth } from "firebase/app";
-import { collection, firestore, getFirestore, addDoc } from 'firebase/firestore';
+import { collection, firestore, getFirestore, addDoc  } from 'firebase/firestore';
+import { ref, set, getDatabase } from 'firebase/database';
 import { firebaseConfig } from '../../firebase-config';
 import 'firebase/auth';
 
@@ -22,9 +23,28 @@ function RegisterScreen(){
   const navigation = useNavigation(); 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const firebase = getFirestore(app)
+  //const firebase = getFirestore();
+  
 
-  const handleCreateAccount = () =>{
+  const handleCreateAccount = async () =>{
+    
+    try {
+      // const rest =  await firestore(name, email).collection('user').add({
+      //email: email,
+      //name: name,
+      const db = getDatabase();
+      await set(ref(db, '/user' ), {
+        email: "hola1@hola.com",
+        name: "hola1",
+        
+      });
+      
+   console.log("funciono");
+    } catch (error) {
+      console.log("error", error);
+      
+    }
+
 
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) =>{
@@ -39,11 +59,19 @@ function RegisterScreen(){
       Alert.alert(error.message)
     })  
     
-  }
+  };
 
   const backLogin = () => {
     navigation.navigate('Login');
-  } 
+  } ;
+
+  const addUser = () => {
+
+    firestore(name, email).collection('user').add({
+      email: email,
+      name: name,
+    })
+  };
 
   return (
     <View style={styles.container}>
@@ -70,7 +98,7 @@ function RegisterScreen(){
               <Text style={{fontSize:17, fontWeight: '400', color:'#FF7D61'}}>Password</Text>
               <TextInput onChangeText={(text) => setPassword(text)} style={styles.input} placeholder="Password" secureTextEntry={true} ></TextInput>
             </View>
-            <TouchableOpacity onPress={ handleCreateAccount  }  style={[styles.button]}>
+            <TouchableOpacity onPress={ handleCreateAccount }style={[styles.button]}>
               <Text style={{fontSize: 17, fontWeight:'400', color:'#FF7D61'}}>Crear usuario</Text>
             </TouchableOpacity>
 

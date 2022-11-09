@@ -11,7 +11,7 @@ import Main from "./src/main/Main";
 import Feed from "./src/main/Feed";
 //import Camara from "./src/main/Camara";
 import ListarMetas from "./src/main/ListarMetas";
-import CreandoMeta from "./src/main/CreandoMeta";
+//import CreandoMeta from "./src/main/CreandoMeta";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +24,7 @@ export default function App() {
         <Stack.Screen name = "Main" component={Main}/>
         <Stack.Screen name = "Feed" component={Feed}/>
         <Stack.Screen name = "ListarMetas" component={ListarMetas}/>
-        <Stack.Screen name = "CreandoMeta" component={CreandoMeta}/>
+        
         
       </Stack.Navigator>
     </NavigationContainer>

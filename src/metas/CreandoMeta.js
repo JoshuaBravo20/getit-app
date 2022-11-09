@@ -2,8 +2,19 @@ import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 import React from 'react';
 
 
+
+
 const CreandoMeta = () => {
     const [nameMeta, setNameMeta] = React.useState('');
+
+    const addMeta = () => {
+
+        firestore(nameMeta).collection('metas').add({
+            nombreMeta: nameMeta,
+        })
+      };
+
+ 
     
   return (
     <View>
@@ -11,7 +22,7 @@ const CreandoMeta = () => {
             <Text style={{fontSize:30, fontWeight: '400', textAlign:'center'}}>Nombre de la meta</Text>
             <TextInput onChangeText={(text) => setNameMeta(text)} placeholder="Crea un nombre a tu meta " style={styles.input}></TextInput>
             <Text style={{fontSize:17, fontWeight: '300', textAlign:'center', margin:10}}>¿Como desea subir su progreso?</Text>
-            <Button  style={{fontSize:17, fontWeight: '400', color:'#FF7D61'}} title='Crear Meta' />
+            <Button  style={{fontSize:17, fontWeight: '400', color:'#FF7D61'}} onPress={addMeta} title='Crear Meta' />
         </View>
  
     </View>
