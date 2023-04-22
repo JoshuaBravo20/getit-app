@@ -17,9 +17,6 @@ const CreandoMeta = () => {
     const addMeta = () => {
         const nuevaMeta = {
             nombreMeta: nameMeta,
-<<<<<<< HEAD
-        })
-=======
             descripcion: descripcionMeta
         }
         addDoc(metasCollectionRef, nuevaMeta)
@@ -29,7 +26,6 @@ const CreandoMeta = () => {
             .catch((error) => {
                 console.error("Error al agregar documento:", error);
             });
->>>>>>> 13631eab5e6757f38abef48ac1640f1863dd33cf
     };
 
 
@@ -39,11 +35,8 @@ const CreandoMeta = () => {
             <View style={styles.container1}>
                 <Text style={{ fontSize: 30, fontWeight: '400', textAlign: 'center' }}>Nombre de la meta</Text>
                 <TextInput onChangeText={(text) => setNameMeta(text)} placeholder="Crea un nombre a tu meta " style={styles.input}></TextInput>
-<<<<<<< HEAD
-=======
                 <Text style={{ fontSize: 30, fontWeight: '400', textAlign: 'center' }}>Descripción de la meta</Text>
                 <TextInput onChangeText={(text) => setDescripcionMate(text)} placeholder="Escribe una descripción " style={styles.input}></TextInput>
->>>>>>> 13631eab5e6757f38abef48ac1640f1863dd33cf
                 <Text style={{ fontSize: 17, fontWeight: '300', textAlign: 'center', margin: 10 }}>¿Como desea subir su progreso?</Text>
                 <Button style={{ fontSize: 17, fontWeight: '400', color: '#FF7D61' }} onPress={addMeta} title='Crear Meta' />
             </View>

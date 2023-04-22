@@ -33,7 +33,10 @@ function ListarMetas() {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.welcome}>Lista de Metas</Text>
+      <View>
+        <Button onPress={crearMeta} title="Crear Meta" />
+      </View> 
+      <Text style={styles.welcome}>Lista de Metas</Text>
         <ScrollView>
           {metas.map((meta) => (
             <View key={meta.id} style={styles.metaContainer}>
@@ -43,9 +46,7 @@ function ListarMetas() {
           ))}
         </ScrollView>
       </View>
-      <View>
-        <Button onPress={crearMeta} title="Crear Meta" />
-      </View>
+      
     </View>
   );
 }
