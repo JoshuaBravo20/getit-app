@@ -28,24 +28,22 @@ function ListarMetas() {
     navigation.navigate('CreandoMeta');
   };
 
-  console.log("Metas => ", metas);
-
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.welcome}>Lista de Metas</Text>
-        <ScrollView>
+      <ScrollView scrollEnabled={true}>
+        <View>
+          <Text style={styles.welcome}>Lista de Metas</Text>
           {metas.map((meta) => (
             <View key={meta.id} style={styles.metaContainer}>
               <Text style={styles.metaTitulo}>{meta.nombreMeta ? meta.nombreMeta : "Titulo acá"}</Text>
               <Text style={styles.metaDescripcion}>{meta.descripcion ? meta.descripcion : 'Descripción acá'}</Text>
             </View>
           ))}
-        </ScrollView>
-      </View>
-      <View>
-        <Button onPress={crearMeta} title="Crear Meta" />
-      </View>
+        </View>
+        <View>
+          <Button onPress={crearMeta} title="Crear Meta" />
+        </View>
+      </ScrollView>
     </View>
   );
 }
