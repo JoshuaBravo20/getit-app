@@ -2,8 +2,6 @@ import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 import React from 'react';
 
 
-
-
 const CreandoMeta = () => {
     const [nameMeta, setNameMeta] = React.useState('');
 

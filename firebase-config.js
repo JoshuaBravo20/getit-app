@@ -7,11 +7,12 @@ import { initializeApp } from "firebase/app";
 export const firebaseConfig = {
   apiKey: "AIzaSyC857nl6B4y2_eqKSeKm4BX-zyXpTy59n8",
   authDomain: "getit-cbcc7.firebaseapp.com",
+  databaseURL: "https://getit-cbcc7-default-rtdb.firebaseio.com",
   projectId: "getit-cbcc7",
   storageBucket: "getit-cbcc7.appspot.com",
   messagingSenderId: "603224426306",
-  appId: "1:603224426306:web:b8ab79d6f712d48dbceadb"
+  appId: "1:603224426306:web:8a651d20fff2d023bceadb"
 };
 
 // Initialize Firebase
-//const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
