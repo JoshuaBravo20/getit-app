@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { collection, query, onSnapshot } from 'firebase/firestore';
-import { database } from '../../firebase-config';
+import { collection, query, onSnapshot, getFirestore } from 'firebase/firestore';
+import { firebaseConfig } from '../../firebase-config';
+import { initializeApp } from "firebase/app";
 
 function ListarMetas() {
+  const app = initializeApp(firebaseConfig);
+  const database = getFirestore(app);
   const navigation = useNavigation();
   const [metas, setMetas] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(database, 'metas'));
+    const metasCollectionRef = collection(database, 'metas');
+    const q = query(metasCollectionRef);
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const docs = [];
       querySnapshot.forEach((doc) => {
@@ -24,6 +28,8 @@ function ListarMetas() {
     navigation.navigate('CreandoMeta');
   };
 
+  console.log("Metas => ", metas);
+
   return (
     <View style={styles.container}>
       <View>
@@ -31,8 +37,8 @@ function ListarMetas() {
         <ScrollView>
           {metas.map((meta) => (
             <View key={meta.id} style={styles.metaContainer}>
-              <Text style={styles.metaTitulo}>{meta.titulo}</Text>
-              <Text style={styles.metaDescripcion}>{meta.descripcion}</Text>
+              <Text style={styles.metaTitulo}>{meta.nombreMeta ? meta.nombreMeta : "Titulo acá"}</Text>
+              <Text style={styles.metaDescripcion}>{meta.descripcion ? meta.descripcion : 'Descripción acá'}</Text>
             </View>
           ))}
         </ScrollView>

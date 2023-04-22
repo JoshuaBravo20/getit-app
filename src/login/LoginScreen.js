@@ -65,7 +65,7 @@ function LoginScreen(){
               <Text style={{fontSize: 17, fontWeight:'400', color:'#FF7D61'}}>Login</Text>
             </TouchableOpacity>
 
-            <CustomButton text="Dont't have account? Creat one" onPress={onSignUpPress}  />
+            <CustomButton text="Dont't have account? Create one" onPress={onSignUpPress}  />
 
           </View>
         </BlurView>
