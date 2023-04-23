@@ -7,8 +7,6 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 
 
-
-
 const CreandoMeta = () => {
     const app = initializeApp(firebaseConfig);
     const database = getFirestore(app);
