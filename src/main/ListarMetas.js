@@ -33,14 +33,10 @@ function ListarMetas() {
     navigation.navigate("CreandoMeta");
   };
 
-  console.log("Metas => ", metas);
-
   return (
     <View style={styles.container}>
-      
-      <ScrollView>
+      <ScrollView scrollEnabled={true}>
         <View>
-          
           <Text style={styles.welcome}>Lista de Metas</Text>
           {metas.map((meta) => (
             <View key={meta.id} style={styles.metaContainer}>
@@ -53,6 +49,7 @@ function ListarMetas() {
             </View>
           ))}
         </View>
+        
       </ScrollView>
       <Button onPress={crearMeta} title="Crear Meta" />
     </View>
