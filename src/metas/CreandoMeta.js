@@ -1,20 +1,24 @@
+import React from 'react';
+import Toast from 'react-native-root-toast';
 import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
-//import { firestore } from 'firebase/firestore';
+import { useNavigation } from "@react-navigation/native";
 import { firebaseConfig } from '../../firebase-config';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 
-import React from 'react';
+
 
 
 const CreandoMeta = () => {
     const app = initializeApp(firebaseConfig);
     const database = getFirestore(app);
-    const metasCollectionRef = collection(database, 'metas');
+
+    const navigation = useNavigation();
     const [nameMeta, setNameMeta] = React.useState('');
     const [descripcionMeta, setDescripcionMate] = React.useState('');
 
     const addMeta = () => {
+        const metasCollectionRef = collection(database, 'metas');
         const nuevaMeta = {
             nombreMeta: nameMeta,
             descripcion: descripcionMeta
@@ -22,13 +26,19 @@ const CreandoMeta = () => {
         addDoc(metasCollectionRef, nuevaMeta)
             .then((docRef) => {
                 console.log("Documento agregado con ID:", docRef.id);
+                Toast.show('Creada con éxito!', {
+                    duration: Toast.durations.LONG,
+                });
+                returnPage();
             })
             .catch((error) => {
                 console.error("Error al agregar documento:", error);
             });
     };
 
-
+    const returnPage = () => {
+        navigation.goBack();
+    }
 
     return (
         <View>
