@@ -1,6 +1,5 @@
 //import { StatusBar } from "expo-status-bar";
 import React from "react";
-
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -19,13 +18,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name = "Login" component={LoginScreen}/>
-        <Stack.Screen name = "Register" component={RegisterScreen}/>
-        <Stack.Screen name = "Main" component={Main}/>
-        <Stack.Screen name = "Feed" component={Feed}/>
-        <Stack.Screen name = "ListarMetas" component={ListarMetas}/>
-        <Stack.Screen name = "CreandoMeta" component={CreandoMeta}/>
-        
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen name="ListarMetas" component={ListarMetas} />
+        <Stack.Screen name="CreandoMeta" component={CreandoMeta} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
