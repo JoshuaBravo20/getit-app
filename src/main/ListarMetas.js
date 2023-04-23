@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Button, ScrollView } from "react-native";
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigation } from "@react-navigation/native";
 import {
   collection,
@@ -9,21 +10,27 @@ import {
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 function ListarMetas() {
   const app = initializeApp(firebaseConfig);
   const database = getFirestore(app);
+  const auth = getAuth(app);
+  const [user, loading, error] = useAuthState(auth);
+
   const navigation = useNavigation();
   const [metas, setMetas] = useState([]);
+
 
   useEffect(() => {
     const metasCollectionRef = collection(database, "metas");
     const q = query(metasCollectionRef);
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const docs = [];
+      let docs = [];
       querySnapshot.forEach((doc) => {
         docs.push({ ...doc.data(), id: doc.id });
       });
+      docs = docs.filter((meta) => meta.creator === user.email);
       setMetas(docs);
     });
     return unsubscribe;
@@ -46,10 +53,13 @@ function ListarMetas() {
               <Text style={styles.metaDescripcion}>
                 {meta.descripcion ? meta.descripcion : "Descripción acá"}
               </Text>
+              <Text style={styles.metaDescripcion}>
+                {meta.creator ? "Creado por: " + meta.creator : "No tiene creator."}
+              </Text>
             </View>
           ))}
         </View>
-        
+
       </ScrollView>
       <Button onPress={crearMeta} title="Crear Meta" />
     </View>

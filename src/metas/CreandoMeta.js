@@ -1,6 +1,8 @@
 import React from 'react';
 import Toast from 'react-native-root-toast';
 import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { firebaseConfig } from '../../firebase-config';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
@@ -10,6 +12,8 @@ import { initializeApp } from "firebase/app";
 const CreandoMeta = () => {
     const app = initializeApp(firebaseConfig);
     const database = getFirestore(app);
+    const auth = getAuth(app);
+    const [user, loading, error] = useAuthState(auth);
 
     const navigation = useNavigation();
     const [nameMeta, setNameMeta] = React.useState('');
@@ -19,7 +23,8 @@ const CreandoMeta = () => {
         const metasCollectionRef = collection(database, 'metas');
         const nuevaMeta = {
             nombreMeta: nameMeta,
-            descripcion: descripcionMeta
+            descripcion: descripcionMeta,
+            creator: user.email
         }
         addDoc(metasCollectionRef, nuevaMeta)
             .then((docRef) => {
