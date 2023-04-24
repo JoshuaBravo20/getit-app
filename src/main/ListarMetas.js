@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Button, ScrollView } from "react-native";
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigation } from "@react-navigation/native";
 import {
   collection,
@@ -11,6 +11,7 @@ import {
 import { firebaseConfig } from "../../firebase-config";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { deleteDoc, doc } from "firebase/firestore";
 
 function ListarMetas() {
   const app = initializeApp(firebaseConfig);
@@ -20,7 +21,6 @@ function ListarMetas() {
 
   const navigation = useNavigation();
   const [metas, setMetas] = useState([]);
-
 
   useEffect(() => {
     const metasCollectionRef = collection(database, "metas");
@@ -39,6 +39,9 @@ function ListarMetas() {
   const crearMeta = () => {
     navigation.navigate("CreandoMeta");
   };
+  const handleBorrar = (id) => {
+    deleteDoc(doc(database, "metas", id));
+  };
 
   return (
     <View style={styles.container}>
@@ -54,12 +57,18 @@ function ListarMetas() {
                 {meta.descripcion ? meta.descripcion : "Descripción acá"}
               </Text>
               <Text style={styles.metaDescripcion}>
-                {meta.creator ? "Creado por: " + meta.creator : "No tiene creator."}
+                {meta.creator
+                  ? "Creado por: " + meta.creator
+                  : "No tiene creator."}
               </Text>
+              <Button
+                style={styles.botonBorrar}
+                title="Borrar"
+                onPress={() => handleBorrar(meta.id)}
+              />
             </View>
           ))}
         </View>
-
       </ScrollView>
       <Button onPress={crearMeta} title="Crear Meta" />
     </View>
@@ -91,6 +100,9 @@ const styles = StyleSheet.create({
   },
   metaDescripcion: {
     fontSize: 16,
+  },
+  botonBorrar: {
+    color: "#DD2700",
   },
 });
 
