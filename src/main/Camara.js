@@ -10,8 +10,6 @@ export default function Camara() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
- 
-
 
   const takePicture = async() =>{
     if(camera){

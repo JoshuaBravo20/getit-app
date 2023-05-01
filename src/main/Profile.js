@@ -4,7 +4,7 @@ import React from 'react';
 const Profile= () => {
   return (
     <View>
-      <Text>Perfil</Text>
+      <Text style={{textAlign: "center"}}>Perfil</Text>
     </View>
   )
 }

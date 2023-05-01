@@ -4,7 +4,7 @@ import React from 'react';
 const Feed = () => {
   return (
     <View>
-      <Text>Feed screen</Text>
+      <Text style={{textAlign: "center"}}>Feed screen</Text>
     </View>
   )
 }

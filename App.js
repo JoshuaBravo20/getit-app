@@ -18,13 +18,12 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen options= {{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Feed" component={Feed} />
-        <Stack.Screen name="ListarMetas" component={ListarMetas} />
+        <Stack.Screen options= {{ headerShown: false }} name="Main" component={Main} />
+        <Stack.Screen options= {{ headerShown: false }} name="Feed" component={Feed} />
+        <Stack.Screen options= {{ headerShown: false }} name="ListarMetas" component={ListarMetas} />
         <Stack.Screen name="CreandoMeta" component={CreandoMeta} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
