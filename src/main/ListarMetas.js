@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -42,6 +49,9 @@ function ListarMetas() {
   const handleBorrar = (id) => {
     deleteDoc(doc(database, "metas", id));
   };
+  const handleVerDetalle = (meta) => {
+    navigation.navigate("meta");
+  };
 
   return (
     <View style={styles.container}>
@@ -49,24 +59,25 @@ function ListarMetas() {
         <View>
           <Text style={styles.welcome}>Lista de Metas</Text>
           {metas.map((meta) => (
-            <View key={meta.id} style={styles.metaContainer}>
-              <Text style={styles.metaTitulo}>
-                {meta.nombreMeta ? meta.nombreMeta : "Titulo acá"}
-              </Text>
-              <Text style={styles.metaDescripcion}>
-                {meta.descripcion ? meta.descripcion : "Descripción acá"}
-              </Text>
-              <Text style={styles.metaDescripcion}>
-                {meta.creator
-                  ? "Creado por: " + meta.creator
-                  : "No tiene creator."}
-              </Text>
-              <Button
-                style={styles.botonBorrar}
-                title="Borrar"
-                onPress={() => handleBorrar(meta.id)}
-              />
-            </View>
+            <TouchableOpacity
+              key={meta.id}
+              style={styles.metaBox}
+              onPress={() => navigation.navigate("meta", { meta })}
+            >
+              <View style={styles.metaContainer}>
+                <Text style={styles.metaTitulo}>
+                  {meta.nombreMeta ? meta.nombreMeta : "Titulo acá"}
+                </Text>
+                <Text style={styles.metaDescripcion}>
+                  {meta.descripcion ? meta.descripcion : "Descripción acá"}
+                </Text>
+                <Text style={styles.metaDescripcion}>
+                  {meta.creator
+                    ? "Creado por: " + meta.creator
+                    : "No tiene creator."}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -102,7 +113,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   botonBorrar: {
-    color: "#DD2700",
+    position: "absolute",
+    right: 10,
+    top: 10,
+    backgroundColor: "red",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
 });
 

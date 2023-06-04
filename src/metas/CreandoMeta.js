@@ -81,7 +81,7 @@ const CreandoMeta = () => {
       <ScrollView scrollEnabled={true}>
         <View style={styles.container1}>
           <Text
-            style={{ fontSize: 30, fontWeight: "400", textAlign: "center" }}
+            style={{ fontSize: 30, fontWeight: "150", textAlign: "center" }}
           >
             Nombre de la meta
           </Text>
@@ -129,8 +129,8 @@ const CreandoMeta = () => {
             />
           </View>
 
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={{ fontSize: 16, marginRight: 10 }}>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchText}>
               Agregar tareas
             </Text>
             <Switch
@@ -152,9 +152,9 @@ const CreandoMeta = () => {
                 <Text
                   style={{
                     fontSize: 17,
-                    fontWeight: "300",
+                    fontWeight: "200",
                     textAlign: "center",
-                    marginRight: 10,
+                    margin: 10,
                   }}
                 >
                   ¿Quieres agregar tareas?
@@ -166,7 +166,7 @@ const CreandoMeta = () => {
                   <TextInput
                     onChangeText={(text) => setNewTask(text)}
                     placeholder="Agrega una tarea"
-                    style={{ ...styles.input, marginRight: 10 }}
+                    style={{ ...styles.input2 }}
                   />
                   <Button title="Agregar" onPress={() => addTask()} />
                 </View>
@@ -210,6 +210,16 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
     width: 350,
+    height: 45,
+    borderColor: "#e8e8e8",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    marginVertical: 10,
+  },
+  input2: {
+    backgroundColor: "white",
+    width: 235,
     height: 45,
     borderColor: "#e8e8e8",
     borderWidth: 1,
