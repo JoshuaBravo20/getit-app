@@ -37,7 +37,10 @@ function ListarMetas() {
       querySnapshot.forEach((doc) => {
         docs.push({ ...doc.data(), id: doc.id });
       });
-      docs = docs.filter((meta) => meta.creator === user.email);
+      docs = docs.filter(
+        (meta) => meta.creator === user.email && meta.deleted === false 
+      );
+
       setMetas(docs);
     });
     return unsubscribe;
@@ -46,9 +49,7 @@ function ListarMetas() {
   const crearMeta = () => {
     navigation.navigate("CreandoMeta");
   };
-  const handleBorrar = (id) => {
-    deleteDoc(doc(database, "metas", id));
-  };
+
   const handleVerDetalle = (meta) => {
     navigation.navigate("meta", { meta });
   };

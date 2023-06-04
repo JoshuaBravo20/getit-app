@@ -33,15 +33,17 @@ const CreandoMeta = () => {
   const [tasks, setTasks] = React.useState([]);
   const [addingTask, setAddingTask] = React.useState(false);
   const [newTasks, setNewTask] = React.useState("");
-
+  const [deleted, setDeleted] = React.useState(false);
+  
   const addMeta = () => {
     const metasCollectionRef = collection(database, "metas");
     const nuevaMeta = {
       nombreMeta: nameMeta,
       descripcion: descripcionMeta,
       creator: user.email,
-      uploadType: uploadType, // Añadir el tipo de subida al objeto de la meta
+      uploadType: uploadType, 
       tasks: tasks,
+      deleted: deleted,
     };
 
     if (useProgressBar) {
