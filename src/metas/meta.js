@@ -1,34 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { firebaseConfig } from "../../firebase-config";
-import { initializeApp } from "firebase/app";
-import {
-  collection,
-  query,
-  onSnapshot,
-  getFirestore,
-  doc,
-} from "firebase/firestore";
 
-function Meta() {
-  const app = initializeApp(firebaseConfig);
-  const database = getFirestore(app);
-  const { params } = useRoute();
-  const [meta, setMeta] = useState({});
-
-  useEffect(() => {
-    const metasCollectionRef = collection(database, "metas");
-    const q = query(metasCollectionRef);
-    const unsubscribe = metasCollectionRef.onSnapshot(q, (querySnapshot) => {
-      setMeta(doc.data());
-    });
-    return unsubscribe;
-  }, []);
-  
-  const handleVerDetalle = (meta) => {
-    navigation.navigate("meta");
-  };
+function Meta({ route }) {
+  const meta = route.params.meta;
   return (
     <View>
       <View style={styles.metaContainer}>
