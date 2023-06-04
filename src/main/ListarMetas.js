@@ -50,7 +50,7 @@ function ListarMetas() {
     deleteDoc(doc(database, "metas", id));
   };
   const handleVerDetalle = (meta) => {
-    navigation.navigate("meta");
+    navigation.navigate("meta", { meta });
   };
 
   return (
@@ -62,7 +62,7 @@ function ListarMetas() {
             <TouchableOpacity
               key={meta.id}
               style={styles.metaBox}
-              onPress={() => navigation.navigate("meta", { meta })}
+              onPress={() => handleVerDetalle(meta)}
             >
               <View style={styles.metaContainer}>
                 <Text style={styles.metaTitulo}>
