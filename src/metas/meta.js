@@ -34,8 +34,9 @@ function Meta({ route }) {
     navigation.goBack();
   };
 
-
-  console.log(meta);
+  const handleUploadPost = (meta) => {
+    navigation.navigate("Camara");
+  };
 
   return (
     <View>
@@ -49,7 +50,7 @@ function Meta({ route }) {
         <Text style={styles.metaDescripcion}>
           {meta.creator ? "Creado por: " + meta.creator : "No tiene creador."}
         </Text>
-        <Button title="subir meta"  />
+        <Button title="Subir Foto" onPress={handleUploadPost()} />
         <Button title="Desactivar Meta" onPress={handleBorrar} />
       </View>
     </View>

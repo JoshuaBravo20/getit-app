@@ -8,7 +8,7 @@ import RegisterScreen from "./src/login/RegisterScreen";
 //import Home from "./src/main/home";
 import Main from "./src/main/Main";
 import Feed from "./src/main/Feed";
-//import Camara from "./src/main/Camara";
+import Camara from "./src/main/Camara";
 import ListarMetas from "./src/main/ListarMetas";
 import CreandoMeta from "./src/metas/CreandoMeta";
 import meta from "./src/metas/meta"
@@ -26,6 +26,7 @@ export default function App() {
         <Stack.Screen options= {{ headerShown: false }} name="ListarMetas" component={ListarMetas} />
         <Stack.Screen name="CreandoMeta" component={CreandoMeta} />
         <Stack.Screen name="meta" component={meta} />
+        <Stack.Screen name="Camara" component={Camara} />
       </Stack.Navigator>
     </NavigationContainer>
   );
