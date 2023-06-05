@@ -11,8 +11,8 @@ export default function Camara() {
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
 
-  const takePicture = async() =>{
-    if(camera){
+  const takePicture = async () => {
+    if (camera) {
       const data = await camera.takePictureAsync(null);
       setImage(data.uri)
     }
@@ -26,7 +26,7 @@ export default function Camara() {
       aspect: [1, 1],
       quality: 1,
     });
-    
+
     console.log(result);
 
     if (!result.cancelled) {
@@ -34,12 +34,12 @@ export default function Camara() {
     }
   };
 
-  if (!permission ) {
+  if (!permission) {
     // Camera permissions are still loading
     return <View />;
   }
 
-  if (!permission.granted ) {
+  if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
@@ -54,16 +54,16 @@ export default function Camara() {
   }
 
   return (
-    <View style={styles.container}>   
+    <View style={styles.container}>
       <View style={styles.cameraContainer}>
-        <Camera ref={ref=>setCamera(ref)} style={styles.fixedRatio} type={type} ratio={'1:1'} />
+        <Camera ref={ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio={'1:1'} />
       </View>
 
-      <Button style={styles.buttonContainer} title="Flip image" onPress={toggleCameraType}/>      
-      <Button title='Take Picture' onPress={()=> takePicture()} />
+      <Button style={styles.buttonContainer} title="Flip image" onPress={toggleCameraType} />
+      <Button title='Take Picture' onPress={() => takePicture()} />
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{uri : image}} style={{flex: 1}} /> }
-      
+      {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+
     </View>
   );
 
@@ -93,12 +93,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  cameraContainer:{
-    flex:1,
+  cameraContainer: {
+    flex: 1,
     flexDirection: 'row',
-  }, 
+  },
   fixedRatio: {
     flex: 1,
-    aspectRatio:1,
+    aspectRatio: 1,
   }
 });

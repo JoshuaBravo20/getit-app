@@ -18,7 +18,6 @@ import {
 import { firebaseConfig } from "../../firebase-config";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { deleteDoc, doc } from "firebase/firestore";
 
 function ListarMetas() {
   const app = initializeApp(firebaseConfig);
