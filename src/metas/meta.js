@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
-import { doc, updateDoc, getFirestore, } from "firebase/firestore";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ProgressBarAndroid,
+} from "react-native";
+import { doc, updateDoc, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../firebase-config";
 import { useNavigation } from "@react-navigation/native";
@@ -10,7 +16,7 @@ function Meta({ route }) {
   const navigation = useNavigation();
   const metaState = useState(route.params.meta);
   const meta = metaState[0];
-  const setMeta = metaState[1];  
+  const setMeta = metaState[1];
   const app = initializeApp(firebaseConfig);
   const database = getFirestore(app);
 
@@ -18,9 +24,9 @@ function Meta({ route }) {
     try {
       const metaRef = doc(database, "metas", meta.id);
       await updateDoc(metaRef, { deleted: true });
-      setMeta(prevMeta => ({
+      setMeta((prevMeta) => ({
         ...prevMeta,
-        deleted: true
+        deleted: true,
       }));
       Toast.show("Desactivada con exito!", {
         duration: Toast.durations.LONG,
@@ -34,8 +40,8 @@ function Meta({ route }) {
     navigation.goBack();
   };
 
-  const handleUploadPost = (Camara) => {
-    navigation.navigate("Camara");
+  const handleUploadPost = (meta) => {
+    navigation.navigate("Camara", { meta });
   };
 
   return (
@@ -50,12 +56,31 @@ function Meta({ route }) {
         <Text style={styles.metaDescripcion}>
           {meta.creator ? "Creado por: " + meta.creator : "No tiene creador."}
         </Text>
-        <Button title="Subir Foto" onPress={handleUploadPost} />
+        <Text>Progreso</Text>
+        {meta.useProgressBar && (
+          <ProgressBarAndroid
+            styleAttr="Horizontal"
+            indeterminate={false}
+            progress={0.5}
+          />
+        )}
+  
+        {meta.uploadType.tasks && meta.tasks && meta.tasks.length > 0 && (
+          <View>
+            <Text>Tareas que debes cumplir:</Text>
+            {meta.tasks.map((task, index) => (
+              <Text key={index}>{task}</Text>
+            ))}
+          </View>
+        )}
+  
+        <Button title="Subir Foto" onPress={() => handleUploadPost(meta)} />
         <Button title="Desactivar Meta" onPress={handleBorrar} />
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -83,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
     marginVertical: 5,
-  }, 
+  },
   metaTitulo: {
     fontSize: 18,
     fontWeight: "bold",

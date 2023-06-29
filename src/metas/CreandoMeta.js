@@ -57,14 +57,16 @@ const CreandoMeta = () => {
     addDoc(metasCollectionRef, nuevaMeta)
       .then((docRef) => {
         console.log("Documento agregado con ID:", docRef.id);
-        Toast.show("Creada con éxito!", {
-          duration: Toast.durations.LONG,
-        });
-        returnPage();
+        //Toast.show("Creada con éxito!", {
+          //duration: Toast.durations.LONG,
+        //});
+        
       })
       .catch((error) => {
         console.error("Error al agregar documento:", error);
       });
+    
+    navigation.navigate("notification");
   };
 
   const addTask = () => {
@@ -76,6 +78,9 @@ const CreandoMeta = () => {
 
   const returnPage = () => {
     navigation.goBack();
+  };
+  const crearMeta = () => {
+    navigation.navigate("CreandoMeta");
   };
 
   return (
