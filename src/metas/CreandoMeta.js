@@ -66,7 +66,7 @@ const CreandoMeta = () => {
         console.error("Error al agregar documento:", error);
       });
     
-    navigation.navigate("notification");
+      navigation.goBack();
   };
 
   const addTask = () => {
@@ -76,9 +76,6 @@ const CreandoMeta = () => {
     setNewTask("");
   };
 
-  const returnPage = () => {
-    navigation.goBack();
-  };
   const crearMeta = () => {
     navigation.navigate("CreandoMeta");
   };

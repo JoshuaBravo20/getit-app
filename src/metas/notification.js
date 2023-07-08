@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PushNotification  from "react-native-push-notification";
+
 
 const ConfigurarNotificacion = () => {
   const navigation = useNavigation();
