@@ -19,8 +19,10 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
-import { initializeApp } from "firebase/app";
-
+import { initializeApp, } from "firebase/app";
+import { getStorage, ref, put } from 'firebase/storage';
+import * as FileSystem from 'expo-file-system';
+import { decode } from 'base-64';
 
 export default function Camara({ route }) {
   const meta = route.params.meta
@@ -33,12 +35,40 @@ export default function Camara({ route }) {
   const app = initializeApp(firebaseConfig);
   const database = getFirestore(app);
   const postCollectionRef = collection(database, "post");
-
   const navigation = useNavigation();
+
+  const uploadToFirebase = async (uriInput, metaId) => {
+    try {
+      const storage = getStorage();
+
+      // Permite al usuario seleccionar una imagen desde la galería
+      const { uri } = uriInput;
+
+      // Lee el contenido de la imagen desde la URI
+      const response = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Decodifica la cadena Base64 en un array de bytes
+      const byteArray = Uint8Array.from(decode(response), (c) => c.charCodeAt(0));
+
+      // Sube el archivo a Firebase Storage
+      const archivoRef = ref(storage);
+      await put(archivoRef, byteArray);
+
+      console.log('Archivo subido correctamente.');
+    } catch (error) {
+      console.error('Error al subir el archivo:', error);
+    }
+  }
+
 
   const takePicture = async () => {
     if (camera) {
       const data = await camera.takePictureAsync(null);
+
+      const response = await uploadToFirebase(data.uri, meta.id)
+      console.log('LINEA 61 CÁMARA, RESPONSE: ', response);
       setImage(data.uri);
     }
   };
@@ -49,7 +79,7 @@ export default function Camara({ route }) {
 
   const post = () => {
     const objectPost = {
-      description : description,
+      description: description,
       creator: meta.creator,
       imgUri: image,
       likes: 0,
@@ -71,7 +101,7 @@ export default function Camara({ route }) {
       });
   };
 
-  
+
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -99,7 +129,7 @@ export default function Camara({ route }) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
-        Necesitamos tu permiso para mostrar la cámara y elegir una en la galería.
+          Necesitamos tu permiso para mostrar la cámara y elegir una en la galería.
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
@@ -139,7 +169,7 @@ export default function Camara({ route }) {
           ></TextInput>
           <Button title="Postear" onPress={post} />
         </View>
-      ) }
+      )}
 
     </View>
   );

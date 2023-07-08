@@ -22,7 +22,7 @@ import { initializeApp } from "firebase/app";
 
 const Profile = () => {
   const [profileImage, setProfileImage] = useState(
-    require("G:/geit/tesis-main/assets/blank-profile.png")
+    require("../../assets/blank-profile.png")
   );
   const app = initializeApp(firebaseConfig);
   const database = getFirestore(app);
