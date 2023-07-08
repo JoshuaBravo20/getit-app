@@ -19,6 +19,7 @@ function Meta({ route }) {
   const setMeta = metaState[1];
   const app = initializeApp(firebaseConfig);
   const database = getFirestore(app);
+  
 
   const handleBorrar = async () => {
     try {

@@ -99,7 +99,7 @@ export default function Camara({ route }) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
-          We need your permission to show the camera and pick one in the gallery
+        Necesitamos tu permiso para mostrar la cámara y elegir una en la galería.
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
@@ -128,8 +128,8 @@ export default function Camara({ route }) {
         title="Flip image"
         onPress={toggleCameraType}
       />
-      <Button title="Take Picture" onPress={() => takePicture()} />
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title="Tomar la foto" onPress={() => takePicture()} />
+      <Button title="Elija una imagen de tu galeria de la cámara" onPress={pickImage} />
       {image && (
         <View>
           <TextInput

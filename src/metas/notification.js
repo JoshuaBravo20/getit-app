@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PushNotification from "react-native-push-notification";
+import PushNotification  from "react-native-push-notification";
 
 const ConfigurarNotificacion = () => {
   const navigation = useNavigation();
@@ -31,13 +31,17 @@ const ConfigurarNotificacion = () => {
       };
   
       // Programar la notificación local
-      PushNotification.localNotificationSchedule({
-        ...opcionesNotificacion,
-        date: fechaNotificacion,
-      });
+      /* const details = {
+        channelId: "channel-id",
+        foreground: false, // BOOLEAN: If the notification was received in foreground or not
+        userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+        message: 'My Notification Message', // STRING: The notification message
+        data: {}, // OBJECT: The push data or the defined userInfo in local notifications
+      } */
+      //PushNotification.localNotification(details)
     }
   
-    navigation.navigate("Home");
+    navigation.navigate("Main");
   };
 
   return (

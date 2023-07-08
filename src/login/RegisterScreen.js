@@ -13,11 +13,6 @@ import {
 import { BlurView } from "expo-blur";
 import Toast from "react-native-root-toast";
 
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
 import { initializeApp, initializeAuth } from "firebase/app";
 import {
   collection,
@@ -28,6 +23,7 @@ import {
 import { ref, set, getDatabase } from "firebase/database";
 import { firebaseConfig } from "../../firebase-config";
 import "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../components/CustomBotton";
@@ -44,35 +40,30 @@ function RegisterScreen() {
 
   const handleCreateAccount = async () => {
     try {
-      // const rest =  await firestore(name, email).collection('user').add({
-      //email: email,
-      //name: name,
-      const db = getDatabase();
-      await set(ref(db, "/user"), {
-        email: "hola1@hola.com",
-        name: "hola1",
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Actualizar el displayName del usuario
+      await updateProfile(user, { displayName: name });
+  
+      // Guardar el nombre en la base de datos de Firestore
+      const db = getFirestore();
+      await addDoc(collection(db, "users"), {
+        name: name,
+        email: email
       });
-
-      console.log("funciono");
+  
+      console.log("Usuario creado exitosamente");
+      Toast.show("Se ha creado el usuario con éxito", {
+        duration: Toast.durations.LONG,
+      });
+      backLogin();
     } catch (error) {
-      console.log("error", error);
-    }
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("Account created");
-        const user = userCredential.user;
-        console.log(user);
-        Toast.show("Se ha creado el usuario con exito", {
-          duration: Toast.durations.LONG,
-        });
-        backLogin();
-      })
-      .catch((error) => {
-        Toast.show("Usuario ya existe", {
-          duration: Toast.durations.LONG,
-        });
+      console.log("Error al crear el usuario:", error);
+      Toast.show("Ha ocurrido un error al crear el usuario", {
+        duration: Toast.durations.LONG,
       });
+    }
   };
 
   const backLogin = () => {

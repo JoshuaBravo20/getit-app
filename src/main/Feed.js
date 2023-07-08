@@ -20,6 +20,7 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  where,
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
 import { initializeApp } from "firebase/app";
@@ -34,7 +35,10 @@ const Feed = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [likedEmails, setLikedEmails] = useState(new Set());
   const [comment, setComment] = useState("");
-
+  const [user, loading, error] = useAuthState(auth);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredMetas, setFilteredMetas] = useState([]);
+  const [metas, setMetas] = useState([]);
 
   useEffect(() => {
     const postCollectionRef = collection(database, "post");
@@ -49,6 +53,20 @@ const Feed = () => {
     });
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    const metaCollectionRef = collection(database, "metas");
+    const q = query(metaCollectionRef, where("nombreMeta", ">=", searchTerm), orderBy("nombreMeta"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let metas = [];
+      querySnapshot.forEach((doc) => {
+        metas.push({ id: doc.id, ...doc.data() });
+      });
+  
+      setFilteredMetas(metas);
+    });
+    return unsubscribe;
+  }, [searchTerm]);
 
   const handleLikePost = async (postId, email) => {
     if (!likedEmails.has(email)) {
@@ -73,36 +91,72 @@ const Feed = () => {
         });
       }
     }
+    setPosts(
+      updatedPosts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [comment, ...post.comments],
+          };
+        }
+        return post;
+      })
+    );
   };
 
   const handleAddComment = async (postId, commentContent) => {
     const comment = {
-      user: currentUserEmail, // El correo electrónico del usuario actual
-      content: commentContent
+      creator: user.email,
+      content: commentContent,
     };
-  
+
     const updatedPosts = posts.map((post) => {
       if (post.id === postId) {
         return {
           ...post,
-          comments: [...post.comments, comment]
+          comments: [...post.comments, comment],
         };
       }
       return post;
     });
-  
+
     setPosts(updatedPosts);
     setComment("");
-  
+
     const postRef = doc(database, "post", postId);
     await updateDoc(postRef, { comments: arrayUnion(comment) });
   };
 
   return (
     <View style={styles.container}>
+
       <ScrollView scrollEnabled={true}>
         <View>
-          <Text style={styles.welcome}>Feed</Text>
+        <Text style={styles.welcome}>Feed</Text>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar metas..."
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+        </View>
+            {(searchTerm !== "" ? filteredMetas : metas).map((meta) => (
+              <TouchableOpacity
+                key={meta.id}
+                style={styles.metaBox}
+                onPress={() => handleLikeMeta(meta.id)}
+              >
+                <View style={styles.metaContainer}>
+                  <Text style={styles.createdBy}>
+                    Creado por: {meta.creator}
+                  </Text>
+                  <Text style={styles.metaName}>{meta.nombreMeta}</Text>
+                  <Text style={styles.metaDescription}>{meta.descripcion}</Text>
+                  {/* ... */}
+                </View>
+              </TouchableOpacity>
+            ))}
           {posts.map((post) => (
             <TouchableOpacity
               key={post.id}
@@ -126,6 +180,15 @@ const Feed = () => {
                 <Text style={styles.description}>
                   {post.description ? post.description : "No hay descripción"}
                 </Text>
+                <View style={styles.commentsContainer}>
+                  {post.comments.map((comment, index) => (
+                    <View style={styles.comment} key={index}>
+                      <Text style={styles.commentCreator}>
+                        {comment.creator}:<Text>{comment.content}</Text>
+                      </Text>
+                    </View>
+                  ))}
+                </View>
                 <TextInput
                   placeholder="Ingrese un comentario"
                   value={comment}
@@ -202,6 +265,34 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 5,
     paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  commentsContainer: {
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
+
+  comment: {
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+
+  commentCreator: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  searchContainer: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 5,
+    backgroundColor: "#f5f5f5",
+  },
+  searchInput: {
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: "#ffffff",
     paddingHorizontal: 10,
   },
 });
