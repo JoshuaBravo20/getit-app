@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-
 const ConfigurarNotificacion = () => {
   const navigation = useNavigation();
   const [frecuencia, setFrecuencia] = useState(""); // Estado para almacenar la frecuencia seleccionada
