@@ -98,8 +98,8 @@ export default function Camara({ route }) {
     const metaRef = doc(databasebase, "metas", meta.id);
     try {
       await updateDoc(metaRef, {
-        cantActualPost: cantActualPost + 1,
-      }).then((resp))
+        cantActualPost: meta.cantActualPost + 1,
+      })
     } catch (error) {
       console.log('error actualizando meta: ', error);
     }
