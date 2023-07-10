@@ -45,6 +45,14 @@ function Meta({ route }) {
     navigation.navigate("Camara", { meta });
   };
 
+  const calcularProgresoMeta = (cantActual, cantTotal) => {
+    if (cantActual === 0) return 0;
+    if (cantActual > 0) {
+      return (cantActual * 1) / cantTotal;
+    }
+  }
+  const metaProgress = calcularProgresoMeta(meta.cantActualPost, meta.cantTotalPost);
+
   return (
     <View>
       <View style={styles.metaContainer}>
@@ -62,7 +70,7 @@ function Meta({ route }) {
           <ProgressBarAndroid
             styleAttr="Horizontal"
             indeterminate={false}
-            progress={0.3}
+            progress={metaProgress}
           />
         )}
   
