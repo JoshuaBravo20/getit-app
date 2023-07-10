@@ -17,16 +17,17 @@ import {
   getFirestore,
   addDoc,
   updateDoc,
-  serverTimestamp
+  serverTimestamp,
+  doc,
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
-import { initializeApp, } from "firebase/app";
-import { getStorage, ref, put } from 'firebase/storage';
-import * as FileSystem from 'expo-file-system';
-import { decode } from 'base-64';
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, put } from "firebase/storage";
+import * as FileSystem from "expo-file-system";
+import { decode } from "base-64";
 
 export default function Camara({ route }) {
-  const meta = route.params.meta
+  const meta = route.params.meta;
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
@@ -36,7 +37,6 @@ export default function Camara({ route }) {
   const app = initializeApp(firebaseConfig);
   const databasebase = getFirestore(app);
   const postCollectionRef = collection(databasebase, "post");
-  const metaCollectionRef = collection(databasebase, "metas");
   const navigation = useNavigation();
 
   /* const uploadToFirebase = async (uriInput, metaId) => {
@@ -58,23 +58,22 @@ export default function Camara({ route }) {
       console.error('Error al subir el archivo:', error);
     }
   }; */
-  
+
   const takePicture = async () => {
     if (camera) {
       const { uri } = await camera.takePictureAsync(null);
-  
+
       //const response = await uploadToFirebase({ uri }, meta.id);
       //console.log('LINEA 61 CÁMARA, RESPONSE: ', response);
       setImage(uri);
     }
   };
-  
 
   const goToFeed = () => {
-    navigation.navigate("Main")
+    navigation.navigate("Main");
   };
 
-  const post = () => {
+  const post = async () => {
     const objectPost = {
       description: description,
       creator: meta.creator,
@@ -83,8 +82,8 @@ export default function Camara({ route }) {
       comments: [],
       relatedGoal: meta.id,
       createdAt: serverTimestamp(),
-    }
-    console.log("objectPost: ", objectPost)
+    };
+    console.log("objectPost: ", objectPost);
     addDoc(postCollectionRef, objectPost)
       .then((docRef) => {
         console.log("Post agregado con ID:", docRef.id);
@@ -96,8 +95,10 @@ export default function Camara({ route }) {
       .catch((error) => {
         console.error("Error al agregar Post:", error);
       });
-    const updatedMeta = {...meta, cantActualPost: cantActualPost + 1};
-    updateDoc(metaCollectionRef, updatedMeta);
+    const metaRef = doc(databasebase, "metas", meta.id);
+    await updateDoc(metaRef, {
+      cantActualPost: cantActualPost + 1,
+    });
   };
 
   const pickImage = async () => {
@@ -126,7 +127,8 @@ export default function Camara({ route }) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
-          Necesitamos tu permiso para mostrar la cámara y elegir una en la galería.
+          Necesitamos tu permiso para mostrar la cámara y elegir una en la
+          galería.
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
@@ -156,7 +158,10 @@ export default function Camara({ route }) {
         onPress={toggleCameraType}
       />
       <Button title="Tomar la foto" onPress={() => takePicture()} />
-      <Button title="Elija una imagen de tu galeria de la cámara" onPress={pickImage} />
+      <Button
+        title="Elija una imagen de tu galeria de la cámara"
+        onPress={pickImage}
+      />
       {image && (
         <View>
           <TextInput
@@ -167,7 +172,6 @@ export default function Camara({ route }) {
           <Button title="Postear" onPress={post} />
         </View>
       )}
-
     </View>
   );
 }
