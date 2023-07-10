@@ -34,6 +34,7 @@ const CreandoMeta = () => {
   const [addingTask, setAddingTask] = React.useState(false);
   const [newTasks, setNewTask] = React.useState("");
   const [deleted, setDeleted] = React.useState(false);
+  const [cantTotalPost, setCantTotalPost] = React.useState("");
   
   const addMeta = () => {
     const metasCollectionRef = collection(database, "metas");
@@ -45,7 +46,9 @@ const CreandoMeta = () => {
       uploadType: uploadType, 
       tasks: tasks,
       deleted: deleted,
-      creationDate
+      creationDate,
+      cantTotalPost,
+      cantActualPost: 0
     };
 
     if (useProgressBar) {
@@ -198,6 +201,18 @@ const CreandoMeta = () => {
               )}
             </View>
           )}
+          <Text
+            style={{ fontSize: 30, fontWeight: "400", textAlign: "center" }}
+          >
+            ¿Cuantos post vas a subir?
+          </Text>
+          <TextInput
+            onChangeText={(text) => setCantTotalPost(text)}
+            placeholder="Cantidad"
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={3}
+          ></TextInput>
 
           <Button
             style={{ fontSize: 17, fontWeight: "400", color: "#FF7D61" }}
