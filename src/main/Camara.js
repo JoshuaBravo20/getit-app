@@ -86,6 +86,7 @@ export default function Camara({ route }) {
     addDoc(postCollectionRef, objectPost)
       .then((docRef) => {
         console.log("Post agregado con ID:", docRef.id);
+        
         Toast.show("Post hecho con éxito!", {
           duration: Toast.durations.LONG,
         });
