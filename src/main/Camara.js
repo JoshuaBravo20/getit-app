@@ -40,7 +40,7 @@ export default function Camara({ route }) {
   const uploadToFirebase = async (uriInput, metaId) => {
     try {
       const storage = getStorage();
-      const { uri } = uriInput;
+      const uri = uriInput;
   
       const response = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,

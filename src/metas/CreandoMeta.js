@@ -13,7 +13,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { firebaseConfig } from "../../firebase-config";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
 const CreandoMeta = () => {
@@ -37,6 +37,7 @@ const CreandoMeta = () => {
   
   const addMeta = () => {
     const metasCollectionRef = collection(database, "metas");
+    const creationDate = serverTimestamp();
     const nuevaMeta = {
       nombreMeta: nameMeta,
       descripcion: descripcionMeta,
@@ -44,6 +45,7 @@ const CreandoMeta = () => {
       uploadType: uploadType, 
       tasks: tasks,
       deleted: deleted,
+      creationDate
     };
 
     if (useProgressBar) {
@@ -57,9 +59,9 @@ const CreandoMeta = () => {
     addDoc(metasCollectionRef, nuevaMeta)
       .then((docRef) => {
         console.log("Documento agregado con ID:", docRef.id);
-        //Toast.show("Creada con éxito!", {
-          //duration: Toast.durations.LONG,
-        //});
+        Toast.show("Creada con éxito!", {
+          duration: Toast.durations.LONG,
+        });
         
       })
       .catch((error) => {

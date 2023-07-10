@@ -1,9 +1,7 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-//import Camara from './Camara';
 import Feed from './Feed';
 import Profile from './Profile';
 import ListarMetas from './ListarMetas';
