@@ -33,45 +33,40 @@ export default function Camara({ route }) {
   const [description, setDescription] = useState(null);
 
   const app = initializeApp(firebaseConfig);
-  const database = getFirestore(app);
-  const postCollectionRef = collection(database, "post");
+  const databasebase = getFirestore(app);
+  const postCollectionRef = collection(databasebase, "post");
   const navigation = useNavigation();
 
   const uploadToFirebase = async (uriInput, metaId) => {
     try {
       const storage = getStorage();
-
-      // Permite al usuario seleccionar una imagen desde la galería
       const { uri } = uriInput;
-
-      // Lee el contenido de la imagen desde la URI
+  
       const response = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
-
-      // Decodifica la cadena Base64 en un array de bytes
+  
       const byteArray = Uint8Array.from(decode(response), (c) => c.charCodeAt(0));
-
-      // Sube el archivo a Firebase Storage
+  
       const archivoRef = ref(storage);
       await put(archivoRef, byteArray);
-
+  
       console.log('Archivo subido correctamente.');
     } catch (error) {
       console.error('Error al subir el archivo:', error);
     }
-  }
-
-
+  };
+  
   const takePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync(null);
-
-      const response = await uploadToFirebase(data.uri, meta.id)
+      const { uri } = await camera.takePictureAsync(null);
+  
+      const response = await uploadToFirebase({ uri }, meta.id);
       console.log('LINEA 61 CÁMARA, RESPONSE: ', response);
-      setImage(data.uri);
+      setImage(uri);
     }
   };
+  
 
   const goToFeed = () => {
     navigation.navigate("Feed")
@@ -100,8 +95,6 @@ export default function Camara({ route }) {
         console.error("Error al agregar Post:", error);
       });
   };
-
-
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
