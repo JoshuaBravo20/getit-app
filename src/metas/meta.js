@@ -62,7 +62,7 @@ function Meta({ route }) {
           <ProgressBarAndroid
             styleAttr="Horizontal"
             indeterminate={false}
-            progress={0.5}
+            progress={0.3}
           />
         )}
   

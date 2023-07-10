@@ -37,7 +37,7 @@ export default function Camara({ route }) {
   const postCollectionRef = collection(databasebase, "post");
   const navigation = useNavigation();
 
-  const uploadToFirebase = async (uriInput, metaId) => {
+  /* const uploadToFirebase = async (uriInput, metaId) => {
     try {
       const storage = getStorage();
       const uri = uriInput;
@@ -55,21 +55,21 @@ export default function Camara({ route }) {
     } catch (error) {
       console.error('Error al subir el archivo:', error);
     }
-  };
+  }; */
   
   const takePicture = async () => {
     if (camera) {
       const { uri } = await camera.takePictureAsync(null);
   
-      const response = await uploadToFirebase({ uri }, meta.id);
-      console.log('LINEA 61 CÁMARA, RESPONSE: ', response);
+      //const response = await uploadToFirebase({ uri }, meta.id);
+      //console.log('LINEA 61 CÁMARA, RESPONSE: ', response);
       setImage(uri);
     }
   };
   
 
   const goToFeed = () => {
-    navigation.navigate("Feed")
+    navigation.navigate("Main")
   };
 
   const post = () => {
