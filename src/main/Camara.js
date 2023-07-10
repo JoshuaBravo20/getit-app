@@ -96,9 +96,13 @@ export default function Camara({ route }) {
         console.error("Error al agregar Post:", error);
       });
     const metaRef = doc(databasebase, "metas", meta.id);
-    await updateDoc(metaRef, {
-      cantActualPost: cantActualPost + 1,
-    });
+    try {
+      await updateDoc(metaRef, {
+        cantActualPost: cantActualPost + 1,
+      }).then((resp))
+    } catch (error) {
+      console.log('error actualizando meta: ', error);
+    }
   };
 
   const pickImage = async () => {
