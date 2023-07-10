@@ -207,7 +207,7 @@ const CreandoMeta = () => {
             ¿Cuantos post vas a subir?
           </Text>
           <TextInput
-            onChangeText={(text) => setCantTotalPost(text)}
+            onChangeText={(text) => setCantTotalPost(parseInt(text))}
             placeholder="Cantidad"
             style={styles.input}
             keyboardType="numeric"
