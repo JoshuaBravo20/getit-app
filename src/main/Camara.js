@@ -16,6 +16,7 @@ import {
   collection,
   getFirestore,
   addDoc,
+  updateDoc,
   serverTimestamp
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
@@ -35,6 +36,7 @@ export default function Camara({ route }) {
   const app = initializeApp(firebaseConfig);
   const databasebase = getFirestore(app);
   const postCollectionRef = collection(databasebase, "post");
+  const metaCollectionRef = collection(databasebase, "metas");
   const navigation = useNavigation();
 
   /* const uploadToFirebase = async (uriInput, metaId) => {
@@ -86,7 +88,6 @@ export default function Camara({ route }) {
     addDoc(postCollectionRef, objectPost)
       .then((docRef) => {
         console.log("Post agregado con ID:", docRef.id);
-        
         Toast.show("Post hecho con éxito!", {
           duration: Toast.durations.LONG,
         });
@@ -95,6 +96,8 @@ export default function Camara({ route }) {
       .catch((error) => {
         console.error("Error al agregar Post:", error);
       });
+    const updatedMeta = {...meta, cantActualPost: cantActualPost + 1};
+    updateDoc(metaCollectionRef, updatedMeta);
   };
 
   const pickImage = async () => {
