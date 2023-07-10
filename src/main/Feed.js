@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Toast from "react-native-root-toast";
 import {
   View,
   Text,
@@ -21,6 +22,8 @@ import {
   updateDoc,
   arrayUnion,
   where,
+  addDoc,
+  serverTimestamp
 } from "firebase/firestore";
 import { firebaseConfig } from "../../firebase-config";
 import { initializeApp } from "firebase/app";
@@ -56,13 +59,17 @@ const Feed = () => {
 
   useEffect(() => {
     const metaCollectionRef = collection(database, "metas");
-    const q = query(metaCollectionRef, where("nombreMeta", ">=", searchTerm), orderBy("nombreMeta"));
+    const q = query(
+      metaCollectionRef,
+      where("nombreMeta", ">=", searchTerm),
+      orderBy("nombreMeta")
+    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let metas = [];
       querySnapshot.forEach((doc) => {
         metas.push({ id: doc.id, ...doc.data() });
       });
-  
+
       setFilteredMetas(metas);
     });
     return unsubscribe;
@@ -127,36 +134,65 @@ const Feed = () => {
     await updateDoc(postRef, { comments: arrayUnion(comment) });
   };
 
+  const handleSearchedMeta = async (meta) => {
+    if (meta.creator !== user.email) {
+      const metaCollectionRef = collection(database, "metas");
+      const creationDate = serverTimestamp();
+      const metaClone = {
+        nombreMeta: meta.nombreMeta,
+        descripcion: meta.descripcion,
+        creator: user.email,
+        uploadType: meta.uploadType ? meta.uploadType : false,
+        tasks: meta.tasks,
+        deleted: meta.deleted ? meta.deleted : false,
+        usePhotoUpload: meta.usePhotoUpload ? meta.usePhotoUpload : false,
+        useProgressBar: meta.useProgressBar ? meta.useProgressBar : false,
+        creationDate
+      };
+
+      addDoc(metaCollectionRef, metaClone)
+        .then((docRef) => {
+          console.log("Documento clonado agregado con ID:", docRef.id);
+          Toast.show("Guardada con éxito!", {
+            duration: Toast.durations.LONG,
+          });
+        })
+        .catch((error) => {
+          console.error("Error al agregar documento:", error);
+        });
+    } else {
+      Toast.show("Ya tienes esta meta agregada a tu lista!", {
+        duration: Toast.durations.LONG,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-
       <ScrollView scrollEnabled={true}>
         <View>
-        <Text style={styles.welcome}>Feed</Text>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Buscar metas..."
-            value={searchTerm}
-            onChangeText={setSearchTerm}
-          />
-        </View>
-            {(searchTerm !== "" ? filteredMetas : metas).map((meta) => (
-              <TouchableOpacity
-                key={meta.id}
-                style={styles.metaBox}
-                onPress={() => handleLikeMeta(meta.id)}
-              >
-                <View style={styles.metaContainer}>
-                  <Text style={styles.createdBy}>
-                    Creado por: {meta.creator}
-                  </Text>
-                  <Text style={styles.metaName}>{meta.nombreMeta}</Text>
-                  <Text style={styles.metaDescription}>{meta.descripcion}</Text>
-                  {/* ... */}
-                </View>
-              </TouchableOpacity>
-            ))}
+          <Text style={styles.welcome}>Feed</Text>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Buscar metas..."
+              value={searchTerm}
+              onChangeText={setSearchTerm}
+            />
+          </View>
+          {(searchTerm !== "" ? filteredMetas : metas).map((meta) => (
+            <TouchableOpacity
+              key={meta.id}
+              style={styles.metaBox}
+              onPress={() => handleSearchedMeta(meta)}
+            >
+              <View style={styles.metaContainer}>
+                <Text style={styles.createdBy}>Creado por: {meta.creator}</Text>
+                <Text style={styles.metaName}>{meta.nombreMeta}</Text>
+                <Text style={styles.metaDescription}>{meta.descripcion}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
           {posts.map((post) => (
             <TouchableOpacity
               key={post.id}
