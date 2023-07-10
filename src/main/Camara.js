@@ -69,7 +69,7 @@ export default function Camara({ route }) {
   
 
   const goToFeed = () => {
-    navigation.navigate("Feed")
+    navigation.navigate("Main")
   };
 
   const post = () => {
